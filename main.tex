@@ -1,0 +1,63 @@
+\documentclass{article} % For LaTeX2e
+\PassOptionsToPackage{table}{xcolor}
+\usepackage{iclr2027_conference,times}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\input{math_commands.tex}
+
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{caption}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{0pt}
+
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+
+\title{AudioMouth: Articulation-Grounded Structured Generation\\ for Speech-Driven Mouth Animation}
+
+\author{Anonymous Authors}
+
+%\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Speech-driven mouth animation aims to produce facial motion synchronized with speech, and existing methods learn this mapping from acoustic features while leaving the articulatory structure of speech implicit in the waveform. Such implicit learning forces the generator to infer which mouth shape a sound requires from acoustics alone, and token-level objectives leave the dynamics and geometry of a complete motion sequence unsupervised. In this paper, we aim to advance speech-driven mouth animation from implicit acoustic regression to explicit articulation-grounded generation. To this end, we propose AudioMouth, which formulates mouth animation as schema-constrained sequence generation with a multimodal language model. AudioMouth first segments long recordings into semantically coherent units sharing temporal boundaries across audio, transcript, phonemes, and target motion, so every phoneme is paired with the motion it produces. Conditioned on these units, AudioMouth generates fixed-schema ARKit coefficient sequences under explicit phoneme-to-articulation grounding, and reweights coefficient-value tokens so frequent near-zero targets no longer dominate supervision. To supervise the trajectory as a whole, AudioMouth further refines the generator with Group Relative Policy Optimization, whose reward measures coefficient accuracy, temporal dynamics, and a simplified lip-geometry discrepancy that reads 3D mouth deformation out of a fixed blendshape basis without rendering or landmark detection. On a subject-disjoint split of BEAT, AudioMouth improves every reported metric over four Audio2ARKit baselines, reducing Fr\'echet distance by 57\% and coefficient MSE by 70\% relative to the strongest of them, and our analyses attribute distributional fidelity to grounding, motion amplitude to balanced supervision, and across-script consistency to geometric feedback.
+\end{abstract}
+
+\input{sec_new/1_intro}
+\input{sec_new/2_related_work}
+\input{sec_new/3_method}
+\input{sec_new/4_exp}
+\input{sec_new/5_analysis}
+\input{sec_new/6_conclusion}
+
+\newpage
+\input{sec_new/statements}
+
+\newpage
+\bibliography{iclr2027_conference,main_extra}
+\bibliographystyle{iclr2027_conference}
+
+\newpage
+\appendix
+\input{sec_new/appendix}
+
+\end{document}

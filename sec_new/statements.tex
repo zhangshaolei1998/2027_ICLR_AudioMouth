@@ -1,0 +1,17 @@
+\subsection*{AI Use Statement}
+
+In this work, we used generative AI tools to design or provide feedback on research methodology or experiments, help develop theoretical models or conceptual frameworks, propose or refine hypotheses, implement methods, and interpret results.
+We did not use generative AI tools to generate synthetic datasets, assist with translation, clean or reformat datasets, or support qualitative and thematic data analysis.
+Formulating mathematical claims, providing critical ingredients for proving mathematical claims, and assisting in the writing of proofs are not applicable to this work.
+Additionally, we used generative AI tools to summarize or analyze existing literature, discover research topics or identify gaps, brainstorm, and revise the wording and organization of the manuscript.
+We have reviewed all AI-assisted work. For manuscript preparation, we reviewed AI-assisted drafts through iterative revision, checking that the wording and organization reflected the intended method. We also corrected the presentation of pseudocode, citation formatting, and figure captions to maintain consistency with the manuscript and figures. We take responsibility for the final content of this work, including text, claims, or artifacts produced with the aid of generative AI.
+
+\subsection*{Ethics Statement}
+
+This work uses BEAT~\citep{liu2022beat}, a motion capture dataset released publicly for research, and we follow the terms of its license. We collect no new human subject data, and the facial coefficients we predict are abstract control values that carry no identity information on their own. Our screening step inspects recorded speech and the corresponding captured motion, and was performed by the authors on data already released for research.
+
+Speech-driven facial animation can be misused to produce synthetic media of a person who never spoke the given words. Our method lowers the effort required to animate a mouth from audio, so it shares this risk with the broader line of work it belongs to. Two properties of our setting bound the risk in practice. The output is a set of named blendshape coefficients instead of photorealistic video, so an additional rendering stage under the operator's control is required before any recognizable identity appears, and our model is trained and evaluated on a single consented corpus instead of on scraped recordings of identifiable individuals. We nonetheless encourage provenance marking of rendered output and support the deployment of detection methods for synthetic facial media.
+
+\subsection*{Reproducibility Statement}
+
+The main text specifies the problem formulation, the three training stages, the reward definition, and the evaluation protocol. Appendix~\ref{app:dataset} describes data screening, semantic segmentation, and the construction of aligned units. Appendix~\ref{app:json} gives the complete output schema, the quantization rule, and the coefficient-value weighting table. Appendix~\ref{app:training} reports the model adaptation and the full set of training hyperparameters for both stages. Appendix~\ref{app:refinement} reports the reward weights, scales, validity handling, and the fixed geometry asset used by SLMD. Appendix~\ref{app:postprocessing} specifies the inference-time post-processing, and Appendix~\ref{app:baselines} records how each baseline was configured.
