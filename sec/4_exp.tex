@@ -223,35 +223,31 @@ Quantitatively, Table~\ref{tab:quantitative_results} compares the complete frame
 
 Qualitatively, Figure~\ref{fig:comparison} compares representative mouth shapes for ``cat'', ``around'', and ``family'' with the corresponding ground truth. The phoneme annotations in the leftmost column identify the speech sounds associated with the displayed frames. These examples illustrate differences in lip closure and mouth opening and complement the coefficient and landmark comparisons.
 
-\input{figures/ablation_conditioning_figure}
+\input{figures/ablation_combined_figure}
 
 \noindent\textbf{Ablation of Linguistic and Articulatory Conditioning.}
-To examine the role of explicit linguistic inputs, we compare the full SFT generator with two variants: w/o Guidance removes articulation instructions while retaining transcripts and phonemes, and Audio Only removes all three while using the same segmented audio (Figure~\ref{fig:ablation_conditioning}).
+To examine the role of explicit linguistic inputs, we compare three SFT variants using the same segmented audio: Audio Only, Audio + Text + Phonemes, and Audio + Text + Phonemes + Guidance (Figure~\ref{fig:ablations}(a)). Text denotes the transcript, and Guidance denotes articulation instructions.
 Full conditioning gives the best overall coefficient accuracy, distributional agreement, and lip-landmark accuracy among these variants.
 The two comparisons assess the contribution of articulation guidance and the joint contribution of transcript and phoneme inputs.
 A plausible explanation is that linguistic cues expose speech structure, while articulation instructions connect that structure to the named facial controls, reducing the ambiguity the generator must resolve from acoustics alone.
 Together, these results support conditioning structured motion generation on both linguistic content and explicit articulatory relations.
 
-\input{figures/ablation_reweighting_figure}
-
 \noindent\textbf{Ablation of Distribution-Balanced Supervision.}
-To assess the effect of coefficient-value imbalance, we compare the weighted SFT objective with w/o Reweighting, which assigns unit weight to coefficient-value tokens while retaining the same conditioning and post-processing (Figure~\ref{fig:ablation_reweighting}).
+To assess the effect of coefficient-value imbalance, we compare the weighted SFT objective with SFT without Reweighting, which assigns unit weight to coefficient-value tokens while retaining the same conditioning and post-processing (Figure~\ref{fig:ablations}(b)).
 Reweighting improves all five reported metrics, indicating benefits for both coefficient reconstruction and the resulting motion distribution and mouth shape.
 This comparison evaluates the contribution of the supervised objective independently of adding linguistic inputs or GRPO refinement.
 Downweighting frequent low-valued targets reduces their dominance in the loss and gives larger coefficient values greater relative emphasis during training.
 The observed gains are consistent with this motivation and support distribution-balanced supervision for structured coefficient generation.
 
-\input{figures/ablation_motion_figure}
-
 \noindent\textbf{Ablation of Sequence-Level Motion Refinement beyond SFT.}
-To evaluate whether motion-level feedback complements token-level learning, we compare the SFT generator with Refined (GRPO) under the same post-processing setting (Figure~\ref{fig:ablation_motion}).
+To evaluate whether motion-level feedback complements token-level learning, we compare the SFT generator with the full GRPO-refined generator under the same post-processing setting (Figure~\ref{fig:ablations}(c)).
 Refinement yields modest, consistent improvements in coefficient accuracy, distributional agreement, and lip-landmark accuracy.
 This comparison assesses the additional value of sequence-level optimization after supervised adaptation.
 The pattern is consistent with the reward supplying feedback on the decoded trajectory's dynamics and geometric effects, which next-token likelihood does not directly measure.
 These results support using motion-aware refinement to complement the structured generation learned during SFT.
 
 \noindent\textbf{Ablation of Explicit Geometric Mouth-Motion Feedback.}
-To assess the contribution of geometric feedback within refinement, we compare the full reward with w/o SLMD, which omits the simplified 3D lip-geometry term (Figure~\ref{fig:ablation_motion}).
+To assess the contribution of geometric feedback within refinement, we compare the full reward with GRPO without SLMD, which omits the simplified 3D lip-geometry term (Figure~\ref{fig:ablations}(c)).
 The full reward achieves lower mean errors across all reported metrics, whereas removing SLMD also loses the distributional gains over SFT.
 This comparison examines the value of geometric supervision alongside coefficient and temporal discrepancies.
 The improvement is consistent with SLMD coupling multiple controls through their combined effect on mouth deformation, a relationship that coefficient-wise errors do not represent explicitly.
