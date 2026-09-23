@@ -1,0 +1,40 @@
+\section{Introduction}
+\label{sec:introduction}
+\label{sec:intro}
+
+Speech-driven facial animation aims to generate temporally synchronized facial motion from speech audio, supporting applications in digital avatars and embodied interaction.
+Recent advances in portrait animation~\cite{ji2021audio,zhang2023sadtalker}, 3D facial animation~\cite{fan2022faceformer,xing2023codetalker}, and audio-conditioned neural rendering~\cite{guo2021ad} have improved the quality of generated talking faces.
+In parallel, compact facial representations, including 3D morphable models, FLAME, and blendshape parameterizations, provide practical control spaces for reconstruction and animation~\cite{blanz2023morphable,li2017learning,menzel2022automated}.
+Within blendshape-based representations, ARKit defines semantically meaningful facial action coefficients~\cite{apple_arkit}, offering an interpretable interface between speech articulation and mouth motion.
+
+Existing audio-driven methods predict facial motion from learned acoustic representations, leaving linguistic and articulatory structure implicit in the input waveform~\cite{cudeiro2019voca,richard2021meshtalk,fan2022faceformer,park2023said}.
+Viseme-based approaches explicitly model phonetic groups~\cite{zhou2018visemenet}, and more recent methods incorporate textual or linguistic cues~\cite{fan2022joint,xu2024kmtalk}.
+However, we observe that relatively little research has explored how aligned audio, transcripts, and phonemes can jointly guide a multimodal language model to generate interpretable ARKit motion trajectories.
+This leads us to ask: \emph{Can a multimodal language model use explicit linguistic and articulatory structure to generate accurate mouth-motion trajectories from speech?}
+
+Bearing this in mind, we consider the connection between phonetic units and the facial actions involved in their production.
+Bilabial consonants involve lip closure, open vowels generally require greater jaw opening, and transitions between phonemes shape the evolution of mouth motion.
+These articulatory relations suggest a natural connection between linguistic inputs and the action semantics of ARKit coefficients.
+Recent language-aware facial models provide further motivation: SemanticFace uses language-aligned semantic supervision to estimate facial actions from images~\cite{kang2026semanticface}, while KeyframeFace incorporates language-model priors and semantic keyframes for text-driven facial animation~\cite{wu2025keyframeface}.
+Together, these connections motivate us to make transcripts, phonemes, and articulation guidance explicit inputs to a model that generates facial controls. 
+Realizing this idea requires both local alignment and suitable training objectives.
+Long recordings must be organized into units in which linguistic content and motion targets share temporal boundaries.
+Furthermore, low-valued coefficients dominate the training targets and can bias token-level learning.
+Even with suitable conditioning, next-token supervision does not explicitly evaluate the temporal dynamics or geometric effects of the resulting trajectories.
+These considerations motivate a framework that combines aligned inputs, balanced coefficient generation, and motion-level feedback.
+
+To this end, we present AudioMouth, a language-assisted framework that formulates the prediction of 32 mouth-related ARKit blendshape trajectories as schema-constrained generation with a multimodal language model.
+AudioMouth first segments long utterances into semantically coherent units and uses shared temporal boundaries to extract aligned audio, transcript, phoneme, and coefficient subsequences.
+The generator then predicts fixed-schema coefficient sequences under explicit phoneme-to-articulation guidance.
+A distribution-balanced supervised objective reweights coefficient-value tokens to reduce the dominance of frequently occurring low-valued targets.
+To connect token-level learning with the quality of generated motion, we further refine the generator using Group Relative Policy Optimization (GRPO).
+The reward compares sampled trajectories with reference motion in terms of coefficient reconstruction, velocity, acceleration, and mouth geometry.
+For geometric feedback, we introduce a simplified lip-geometry discrepancy (SLMD) that maps coefficient differences to weighted mouth-vertex displacements through a fixed blendshape basis.
+This provides a 3D geometric surrogate without rendering or landmark detection and complements coefficient-wise and temporal supervision. Our contributions are threefold:
+\begin{itemize}
+    \item We propose AudioMouth, a language-assisted framework that integrates aligned linguistic inputs and explicit articulation guidance into the structured generation of mouth-related ARKit trajectories with a multimodal language model.
+
+    \item We develop a three-stage framework that combines audio-linguistic unit construction, distribution-balanced supervised generation, and motion-aware policy refinement. We introduce SLMD to provide geometric feedback directly from coefficient-induced mouth deformation.
+
+    \item On the selected data, AudioMouth outperforms four Audio2ARKit baselines across all five reported metrics, reducing Fr\'echet distance from the best baseline value of $25.228$ to $10.820$. Ablations support the benefits of linguistic and articulatory conditioning and show additional improvements in distributional and geometric fidelity after motion-aware refinement.
+\end{itemize}

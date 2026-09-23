@@ -1,0 +1,120 @@
+
+\documentclass{article} % For LaTeX2e
+\usepackage{iclr2027_conference,times}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\input{math_commands.tex}
+
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+
+\title{AudioMouth: Language-Assisted Speech-Driven Mouth Animation with Multimodal Language Models}
+
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the \iclrfinalcopy macro remains commented out below.
+% Non-anonymous submissions will be rejected without review.
+
+\author{Antiquus S.~Hippocampus, Natalia Cerebro \& Amelie P. Amygdale \thanks{ Use footnote for providing further information
+about author (webpage, alternative address)---\emph{not} for acknowledging
+funding agencies.  Funding acknowledgements go at the end of the paper.} \\
+Department of Computer Science\\
+Cranberry-Lemon University\\
+Pittsburgh, PA 15213, USA \\
+\texttt{\{hippo,brain,jen\}@cs.cranberry-lemon.edu} \\
+\And
+Ji Q. Ren \& Yevgeny LeNet \\
+Department of Computational Neuroscience \\
+University of the Witwatersrand \\
+Joburg, South Africa \\
+\texttt{\{robot,net\}@wits.ac.za} \\
+\AND
+Coauthor \\
+Affiliation \\
+Address \\
+\texttt{email}
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+%\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
+\begin{document}
+
+
+\maketitle
+
+\begin{abstract}
+Speech-driven facial animation aims to recover fine-grained articulation from audio, yet existing methods largely learn this mapping 
+from acoustic features while leaving the linguistic structure of speech implicit. Such direct audio-to-motion learning can obscure 
+phoneme-specific articulation and weaken local correspondence in long utterances, while token-level objectives do not explicitly 
+supervise the dynamics or geometry of complete motion sequences.
+We present \textbf{AudioMouth}, a language-assisted framework that formulates audio-to-motion synthesis as schema-constrained sequence 
+generation with a multimodal language model.  
+To expose the articulatory structure underlying speech, AudioMouth first decomposes 
+long recordings into semantically coherent and temporally aligned units comprising audio, transcripts, phonemes, and target motion.
+The model is then trained to generate fixed-schema coefficient sequences with explicit phoneme-to-articulation guidance and a 
+distribution-balanced objective that mitigates the dominance of frequently occurring low-valued coefficients.
+To complement token-level supervision with motion-level feedback, we further refine the generated 
+sequences using Group Relative Policy Optimization. The motion-level reward jointly evaluates coefficient reconstruction, 
+velocity, acceleration, and a simplified lip-geometry discrepancy that measures 3D mouth deformation in a fixed blendshape 
+space without requiring rendering or landmark detection.
+On the selected data with a subject-disjoint split, AudioMouth outperforms four Audio2ARKit baselines across all five reported metrics,
+reducing Fr\'echet distance from $25.228$ to $10.820$. These results indicate that language-guided structured generation and sequence-level motion
+supervision tackle complementary sources of error in speech-driven mouth animation.
+\end{abstract}
+
+\input{sec/1_intro}  
+\input{sec/2_related_work}
+\input{sec/3_method}
+\input{sec/4_exp}
+\input{sec/5_conclusion}
+\newpage
+\subsection*{AI Use Statement}
+
+In this work, we used generative AI tools to design or provide feedback on research methodology or experiments, help develop theoretical models or conceptual frameworks, propose or refine hypotheses, implement methods, and interpret results.
+We did not use generative AI tools to generate synthetic datasets, assist with translation, clean or reformat datasets, or support qualitative and thematic data analysis.
+Formulating mathematical claims, providing critical ingredients for proving mathematical claims, and assisting in the writing of proofs are not applicable to this work.
+Additionally, we used generative AI tools to summarize or analyze existing literature, discover research topics or identify gaps, brainstorm, and revise the wording and organization of the manuscript.
+We have reviewed all AI-assisted work. For manuscript preparation, we reviewed AI-assisted drafts through iterative revision, checking that the wording and organization reflected the intended method. We also corrected the presentation of pseudocode, citation formatting, and figure captions to maintain consistency with the manuscript and figures. We take responsibility for the final content of this work, including text, claims, or artifacts produced with the aid of generative AI.
+
+\subsection*{Ethics statement}
+
+(This section is \textbf{recommended} and does not count toward the page limit.)
+
+If authors feel that their paper submission raises questions regarding the Code
+of Ethics, they are encouraged to include a paragraph of Ethics Statement (at
+the end of the main text before references) to address potential concerns where
+appropriate. Topics include, but are not limited to, studies that involve human
+subjects, practices to data set releases, potentially harmful insights,
+methodologies and applications, potential conflicts of interest and sponsorship,
+discrimination/bias/fairness concerns, privacy and security issues, legal
+compliance, and research integrity issues (e.g., IRB, documentation, research
+ethics). This statement should not be more than 1 page.
+
+\subsection*{Reproducibility Statement}
+
+To support reproducibility, we provide detailed descriptions of the methodology, data processing, model and training configurations, reward design, baseline settings, and inference post-processing in the main text and appendix.
+
+\newpage
+\bibliography{iclr2027_conference}
+\bibliographystyle{iclr2027_conference}
+\newpage
+\appendix
+\input{sec/appendix}
+
+
+\end{document}
+%弱化一些可能被攻击的表述
+%删去表格的title
+%实验讲述——大体总结——说明效用——解释原因——侧面证明方法
